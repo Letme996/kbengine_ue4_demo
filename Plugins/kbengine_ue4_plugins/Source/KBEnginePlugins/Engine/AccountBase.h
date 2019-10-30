@@ -11,6 +11,9 @@
 #include "KBETypes.h"
 #include "EntityCallAccountBase.h"
 
+namespace KBEngine
+{
+
 class Method;
 class Property;
 class MemoryStream;
@@ -29,6 +32,9 @@ public:
 	virtual void onCreateAvatarResult(uint8 arg1, const AVATAR_INFOS& arg2) = 0; 
 	virtual void onRemoveAvatar(uint64 arg1) = 0; 
 	virtual void onReqAvatarList(const AVATAR_INFOS_LIST& arg1) = 0; 
+
+	void onComponentsEnterworld() override;
+	void onComponentsLeaveworld() override;
 
 	void onGetBase() override;
 	void onGetCell() override;
@@ -50,3 +56,4 @@ public:
 
 };
 
+}

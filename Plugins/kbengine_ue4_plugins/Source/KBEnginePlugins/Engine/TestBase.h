@@ -12,6 +12,9 @@
 #include "ServerErrorDescrs.h"
 #include "EntityCallTestBase.h"
 
+namespace KBEngine
+{
+
 class Method;
 class Property;
 class MemoryStream;
@@ -22,6 +25,7 @@ class KBENGINEPLUGINS_API TestBase : public EntityComponent
 public:
 	EntityBaseEntityCall_TestBase* pBaseEntityCall;
 	EntityCellEntityCall_TestBase* pCellEntityCall;
+	ScriptModule* getScriptModule();
 
 	int32 own;
 	virtual void onOwnChanged(int32 oldValue) {}
@@ -32,6 +36,10 @@ public:
 
 	void createFromStream(MemoryStream& stream) override;
 
+	void onGetBase() override;
+	void onGetCell() override;
+	void onLoseCell() override;
+
 	void onRemoteMethodCall(uint16 methodUtype, MemoryStream& stream) override;
 	void onUpdatePropertys(uint16 propUtype, MemoryStream& stream, int maxCount) override;
 	void callPropertysSetMethods() override;
@@ -41,3 +49,4 @@ public:
 
 };
 
+}

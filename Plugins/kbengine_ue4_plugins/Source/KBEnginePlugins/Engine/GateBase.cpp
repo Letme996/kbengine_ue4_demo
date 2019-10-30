@@ -9,6 +9,18 @@
 #include "MemoryStream.h"
 #include "EntityComponent.h"
 
+namespace KBEngine
+{
+
+
+
+void GateBase::onComponentsEnterworld()
+{
+}
+
+void GateBase::onComponentsLeaveworld()
+{
+}
 
 void GateBase::onGetBase()
 {
@@ -438,3 +450,4 @@ void GateBase::detachComponents()
 {
 }
 
+}

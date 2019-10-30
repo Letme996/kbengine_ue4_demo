@@ -9,6 +9,18 @@
 #include "MemoryStream.h"
 #include "EntityComponent.h"
 
+namespace KBEngine
+{
+
+
+
+void NPCBase::onComponentsEnterworld()
+{
+}
+
+void NPCBase::onComponentsLeaveworld()
+{
+}
 
 void NPCBase::onGetBase()
 {
@@ -478,3 +490,4 @@ void NPCBase::detachComponents()
 {
 }
 
+}

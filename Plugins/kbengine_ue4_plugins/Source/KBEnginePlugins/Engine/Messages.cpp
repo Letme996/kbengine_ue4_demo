@@ -2,6 +2,9 @@
 #include "MemoryStream.h"
 #include "KBEngine.h"
 
+namespace KBEngine
+{
+
 TMap<MessageID, Message*> Messages::loginappMessages;
 TMap<MessageID, Message*> Messages::baseappMessages;
 TMap<MessageID, Message*> Messages::clientMessages;
@@ -173,9 +176,129 @@ void Message_Client_onUpdateData_xyz_r::handleMessage(MemoryStream& msgstream)
 	KBEngineApp::getSingleton().Client_onUpdateData_xyz_r(msgstream);
 }
 
+void Message_Client_onUpdateData_ypr_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_ypr_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_yp_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_yp_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_yr_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_yr_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_pr_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_pr_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_y_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_y_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_p_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_p_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_r_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_r_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xz_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xz_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xz_ypr_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xz_ypr_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xz_yp_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xz_yp_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xz_yr_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xz_yr_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xz_pr_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xz_pr_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xz_y_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xz_y_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xz_p_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xz_p_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xz_r_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xz_r_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xyz_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xyz_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xyz_ypr_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xyz_ypr_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xyz_yp_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xyz_yp_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xyz_yr_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xyz_yr_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xyz_pr_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xyz_pr_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xyz_y_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xyz_y_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xyz_p_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xyz_p_optimized(msgstream);
+}
+
+void Message_Client_onUpdateData_xyz_r_optimized::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onUpdateData_xyz_r_optimized(msgstream);
+}
+
 void Message_Client_onImportServerErrorsDescr::handleMessage(MemoryStream& msgstream)
 {
 	KBEngineApp::getSingleton().Client_onImportServerErrorsDescr(msgstream);
+}
+
+void Message_Client_onImportClientSDK::handleMessage(MemoryStream& msgstream)
+{
+	KBEngineApp::getSingleton().Client_onImportClientSDK(msgstream);
 }
 
 void Message_Client_initSpaceData::handleMessage(MemoryStream& msgstream)
@@ -370,6 +493,10 @@ void Message_Loginapp_reqCreateMailAccount::handleMessage(MemoryStream& msgstrea
 {
 }
 
+void Message_Loginapp_importClientSDK::handleMessage(MemoryStream& msgstream)
+{
+}
+
 void Message_Loginapp_importServerErrorsDescr::handleMessage(MemoryStream& msgstream)
 {
 }
@@ -438,3 +565,5 @@ void Message_Entity_onRemoteMethodCall::handleMessage(MemoryStream& msgstream)
 {
 }
 
+
+}

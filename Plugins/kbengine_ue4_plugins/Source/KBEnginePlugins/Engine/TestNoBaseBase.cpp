@@ -9,12 +9,46 @@
 #include "CustomDataTypes.h"
 #include "MemoryStream.h"
 
+namespace KBEngine
+{
+
+
 
 void TestNoBaseBase::createFromStream(MemoryStream& stream)
 {
 	EntityComponent::createFromStream(stream);
+}
+
+void TestNoBaseBase::onGetBase()
+{
+	ownerID = pOwner->id();
+
+	if(pBaseEntityCall)
+		delete pBaseEntityCall;
+
 	pBaseEntityCall = new EntityBaseEntityCall_TestNoBaseBase(entityComponentPropertyID, ownerID);
+}
+
+void TestNoBaseBase::onGetCell()
+{
+	ownerID = pOwner->id();
+
+	if(pCellEntityCall)
+		delete pCellEntityCall;
+
 	pCellEntityCall = new EntityCellEntityCall_TestNoBaseBase(entityComponentPropertyID, ownerID);
+}
+
+void TestNoBaseBase::onLoseCell()
+{
+	delete pCellEntityCall;
+	pCellEntityCall = NULL;
+}
+
+
+ScriptModule* TestNoBaseBase::getScriptModule()
+{
+	return *EntityDef::moduledefs.Find("TestNoBase");
 }
 
 void TestNoBaseBase::onRemoteMethodCall(uint16 methodUtype, MemoryStream& stream)
@@ -169,5 +203,7 @@ TestNoBaseBase::~TestNoBaseBase()
 
 	if(pCellEntityCall)
 		delete pCellEntityCall;
+
+}
 
 }

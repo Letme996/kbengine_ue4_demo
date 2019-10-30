@@ -9,6 +9,18 @@
 #include "MemoryStream.h"
 #include "EntityComponent.h"
 
+namespace KBEngine
+{
+
+
+
+void SpawnPointBase::onComponentsEnterworld()
+{
+}
+
+void SpawnPointBase::onComponentsLeaveworld()
+{
+}
 
 void SpawnPointBase::onGetBase()
 {
@@ -398,3 +410,4 @@ void SpawnPointBase::detachComponents()
 {
 }
 
+}

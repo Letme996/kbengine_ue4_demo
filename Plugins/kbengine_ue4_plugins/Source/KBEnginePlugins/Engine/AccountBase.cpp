@@ -9,6 +9,18 @@
 #include "MemoryStream.h"
 #include "EntityComponent.h"
 
+namespace KBEngine
+{
+
+
+
+void AccountBase::onComponentsEnterworld()
+{
+}
+
+void AccountBase::onComponentsLeaveworld()
+{
+}
 
 void AccountBase::onGetBase()
 {
@@ -48,18 +60,23 @@ void AccountBase::onRemoteMethodCall(MemoryStream& stream)
 	uint16 methodUtype = 0;
 	uint16 componentPropertyUType = 0;
 
-	if (sm->useMethodDescrAlias)
+	if (sm->usePropertyDescrAlias)
 	{
 		componentPropertyUType = stream.readUint8();
-		methodUtype = stream.read<uint8>();
 	}
 	else
 	{
 		componentPropertyUType = stream.readUint16();
-		methodUtype = stream.read<uint16>();
 	}
 
-	Method* pMethod = sm->idmethods[methodUtype];
+	if (sm->useMethodDescrAlias)
+	{
+		methodUtype = stream.read<uint8>();
+	}
+	else
+	{
+		methodUtype = stream.read<uint16>();
+	}
 
 	if(componentPropertyUType > 0)
 	{
@@ -67,6 +84,8 @@ void AccountBase::onRemoteMethodCall(MemoryStream& stream)
 
 		return;
 	}
+
+	Method* pMethod = sm->idmethods[methodUtype];
 
 	switch(pMethod->methodUtype)
 	{
@@ -288,3 +307,4 @@ void AccountBase::detachComponents()
 {
 }
 
+}

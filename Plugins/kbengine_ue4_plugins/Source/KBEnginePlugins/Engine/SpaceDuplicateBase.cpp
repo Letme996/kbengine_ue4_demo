@@ -9,6 +9,18 @@
 #include "MemoryStream.h"
 #include "EntityComponent.h"
 
+namespace KBEngine
+{
+
+
+
+void SpaceDuplicateBase::onComponentsEnterworld()
+{
+}
+
+void SpaceDuplicateBase::onComponentsLeaveworld()
+{
+}
 
 void SpaceDuplicateBase::onGetBase()
 {
@@ -398,3 +410,4 @@ void SpaceDuplicateBase::detachComponents()
 {
 }
 
+}

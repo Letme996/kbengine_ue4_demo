@@ -8,9 +8,29 @@
 #include "CustomDataTypes.h"
 #include "MemoryStream.h"
 #include "EntityComponent.h"
+
 #include "Scripts/Components/Test.h"
+
 #include "Scripts/Components/TestNoBase.h"
 
+namespace KBEngine
+{
+
+
+
+void AvatarBase::onComponentsEnterworld()
+{
+	component1->onEnterworld();
+	component2->onEnterworld();
+	component3->onEnterworld();
+}
+
+void AvatarBase::onComponentsLeaveworld()
+{
+	component1->onLeaveworld();
+	component2->onLeaveworld();
+	component3->onLeaveworld();
+}
 
 void AvatarBase::onGetBase()
 {
@@ -18,6 +38,9 @@ void AvatarBase::onGetBase()
 		delete pBaseEntityCall;
 
 	pBaseEntityCall = new EntityBaseEntityCall_AvatarBase(id(), className());
+	component1->onGetBase();
+	component2->onGetBase();
+	component3->onGetBase();
 }
 
 void AvatarBase::onGetCell()
@@ -26,12 +49,18 @@ void AvatarBase::onGetCell()
 		delete pCellEntityCall;
 
 	pCellEntityCall = new EntityCellEntityCall_AvatarBase(id(), className());
+	component1->onGetCell();
+	component2->onGetCell();
+	component3->onGetCell();
 }
 
 void AvatarBase::onLoseCell()
 {
 	delete pCellEntityCall;
 	pCellEntityCall = NULL;
+	component1->onLoseCell();
+	component2->onLoseCell();
+	component3->onLoseCell();
 }
 
 EntityCall* AvatarBase::getBaseEntityCall()
@@ -50,18 +79,23 @@ void AvatarBase::onRemoteMethodCall(MemoryStream& stream)
 	uint16 methodUtype = 0;
 	uint16 componentPropertyUType = 0;
 
-	if (sm->useMethodDescrAlias)
+	if (sm->usePropertyDescrAlias)
 	{
 		componentPropertyUType = stream.readUint8();
-		methodUtype = stream.read<uint8>();
 	}
 	else
 	{
 		componentPropertyUType = stream.readUint16();
-		methodUtype = stream.read<uint16>();
 	}
 
-	Method* pMethod = sm->idmethods[methodUtype];
+	if (sm->useMethodDescrAlias)
+	{
+		methodUtype = stream.read<uint8>();
+	}
+	else
+	{
+		methodUtype = stream.read<uint16>();
+	}
 
 	if(componentPropertyUType > 0)
 	{
@@ -82,6 +116,8 @@ void AvatarBase::onRemoteMethodCall(MemoryStream& stream)
 
 		return;
 	}
+
+	Method* pMethod = sm->idmethods[methodUtype];
 
 	switch(pMethod->methodUtype)
 	{
@@ -945,14 +981,17 @@ AvatarBase::AvatarBase():
 	component1->pOwner = this;
 	component1->ownerID = id_;
 	component1->entityComponentPropertyID = 16;
+	component1->name_ = "Test";
 
 	component2->pOwner = this;
 	component2->ownerID = id_;
 	component2->entityComponentPropertyID = 21;
+	component2->name_ = "Test";
 
 	component3->pOwner = this;
 	component3->ownerID = id_;
 	component3->entityComponentPropertyID = 22;
+	component3->name_ = "TestNoBase";
 
 }
 
@@ -989,3 +1028,32 @@ void AvatarBase::detachComponents()
 	component3->onDetached(this);
 }
 
+TArray<EntityComponent*> AvatarBase::getComponents(FString componentName, bool all)
+{
+	TArray<EntityComponent*> founds;
+
+	if(component1->name_ == componentName)
+	{
+		founds.Add(component1);
+		if(!all)
+			return founds;
+	}
+
+	if(component2->name_ == componentName)
+	{
+		founds.Add(component2);
+		if(!all)
+			return founds;
+	}
+
+	if(component3->name_ == componentName)
+	{
+		founds.Add(component3);
+		if(!all)
+			return founds;
+	}
+
+	return founds;
+}
+
+}

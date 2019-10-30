@@ -1,36 +1,44 @@
-﻿#include "EncryptionFilter.h"
+#include "EncryptionFilter.h"
 #include "MemoryStream.h"
 #include "MessageReader.h"
 #include "PacketSenderTCP.h"
 #include "PacketSenderKCP.h"
 #include "Engine/KBDebug.h"
 
-#include "cryptlib.h"
-#include "rdrand.h"
-#include "modes.h"
-#include "secblock.h"
+namespace KBEngine
+{
 
-BlowfishFilter::BlowfishFilter(int keySize):
+EncryptionFilter::~EncryptionFilter()
+{
+}
+
+BlowfishFilter::BlowfishFilter(int keySize) :
 	isGood_(false),
 	pPacket_(new MemoryStream()),
 	pEncryptStream_(new MemoryStream()),
 	packetLen_(0),
-	padSize_(0)
+	padSize_(0),
+	key_(),
+	keySize_(0),
+	pBlowFishKey_(NULL)
 {
-	key_.Init(0, keySize);
+	unsigned char buf[20] = "";
+	RAND_bytes(buf, 20);
+	key_ = (char *)buf;
+	keySize_ = key_.Len();
 
-	CryptoPP::RDRAND rng;
-	rng.GenerateBlock(key_.GetData(), key_.Num());
 	init();
 }
 
-BlowfishFilter::BlowfishFilter(const TArray<uint8>& key):
+BlowfishFilter::BlowfishFilter(const FString & key) :
 	isGood_(false),
-	key_(key),
 	pPacket_(new MemoryStream()),
 	pEncryptStream_(new MemoryStream()),
 	packetLen_(0),
-	padSize_(0)
+	padSize_(0),
+	key_(key),
+	keySize_(key_.Len()),
+	pBlowFishKey_(NULL)
 {
 	init();
 }
@@ -39,19 +47,22 @@ BlowfishFilter::~BlowfishFilter()
 {
 	KBE_SAFE_RELEASE(pPacket_);
 	KBE_SAFE_RELEASE(pEncryptStream_);
+	KBE_SAFE_RELEASE(pBlowFishKey_);
 }
 
 bool BlowfishFilter::init()
 {
-	if (key_.Num() >= encripter.MinKeyLength() && key_.Num() <= encripter.MaxKeyLength())
+	pBlowFishKey_ = new BF_KEY;
+
+	if (MIN_KEY_SIZE <= keySize_ && keySize_ <= MAX_KEY_SIZE)
 	{
-		encripter.SetKey(key_.GetData(), key_.Num());
-		decripter.SetKey(key_.GetData(), key_.Num());
+
+		BF_set_key(this->pBlowFishKey(), key_.Len(), reinterpret_cast<const unsigned char*>(TCHAR_TO_ANSI(*key_)));
 		isGood_ = true;
 	}
 	else
 	{
-		ERROR_MSG("BlowfishFilter::init: invalid length %d", key_.Num());
+		ERROR_MSG("BlowfishFilter::init: invalid length %d", key_.Len());
 		isGood_ = false;
 	}
 
@@ -106,7 +117,7 @@ void BlowfishFilter::encrypt(uint8 *buf, MessageLengthEx len)
 			prevBlock = *(uint64*)(data + i);
 		}
 
-		encripter.ProcessData(data + i, data + i, BLOCK_SIZE);
+		BF_ecb_encrypt(data + i, data + i, this->pBlowFishKey(), BF_ENCRYPT);
 	}
 }
 
@@ -132,13 +143,13 @@ void BlowfishFilter::decrypt(uint8 *buf, MessageLengthEx len)
 	uint64 prevBlock = 0;
 	for (uint32 i = 0; i < len; i += BLOCK_SIZE)
 	{
-		decripter.ProcessData(data + i, data + i, BLOCK_SIZE);
+		BF_ecb_encrypt(data + i, data + i, this->pBlowFishKey(), BF_DECRYPT);
 
 		if (prevBlock != 0)
 		{
 			*(uint64*)(data + i) = *(uint64*)(data + i) ^ (prevBlock);
 		}
-		
+
 		prevBlock = *(uint64*)(data + i);
 	}
 }
@@ -157,7 +168,6 @@ bool BlowfishFilter::send(PacketSenderBase* pPacketSender, MemoryStream *pPacket
 	}
 
 	encrypt(pPacket);
-
 	return pPacketSender->send(pPacket);;
 }
 
@@ -173,7 +183,7 @@ bool BlowfishFilter::recv(MessageReader* pMessageReader, MemoryStream *pPacket)
 	uint32 len = pPacket->length();
 	uint16 packeLen = pPacket->readUint16();
 
-	if ( 0 == pPacket_->length() && len > MIN_PACKET_SIZE && packeLen - 1 == len - 3)
+	if (0 == pPacket_->length() && len > MIN_PACKET_SIZE && packeLen - 1 == len - 3)
 	{
 		int padSize = pPacket->readUint8();
 		decrypt(pPacket);
@@ -255,7 +265,7 @@ bool BlowfishFilter::recv(MessageReader* pMessageReader, MemoryStream *pPacket)
 		packetLen_ = 0;
 		padSize_ = 0;
 	}
-	
 	return true;
 }
 
+}

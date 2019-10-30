@@ -11,6 +11,9 @@
 #include "KBETypes.h"
 #include "EntityCallGateBase.h"
 
+namespace KBEngine
+{
+
 class Method;
 class Property;
 class MemoryStream;
@@ -37,6 +40,9 @@ public:
 	virtual void onUtypeChanged(uint32 oldValue) {}
 
 
+	void onComponentsEnterworld() override;
+	void onComponentsLeaveworld() override;
+
 	void onGetBase() override;
 	void onGetCell() override;
 	void onLoseCell() override;
@@ -57,3 +63,4 @@ public:
 
 };
 
+}

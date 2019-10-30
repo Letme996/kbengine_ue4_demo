@@ -9,6 +9,18 @@
 #include "MemoryStream.h"
 #include "EntityComponent.h"
 
+namespace KBEngine
+{
+
+
+
+void MonsterBase::onComponentsEnterworld()
+{
+}
+
+void MonsterBase::onComponentsLeaveworld()
+{
+}
 
 void MonsterBase::onGetBase()
 {
@@ -48,18 +60,23 @@ void MonsterBase::onRemoteMethodCall(MemoryStream& stream)
 	uint16 methodUtype = 0;
 	uint16 componentPropertyUType = 0;
 
-	if (sm->useMethodDescrAlias)
+	if (sm->usePropertyDescrAlias)
 	{
 		componentPropertyUType = stream.readUint8();
-		methodUtype = stream.read<uint8>();
 	}
 	else
 	{
 		componentPropertyUType = stream.readUint16();
-		methodUtype = stream.read<uint16>();
 	}
 
-	Method* pMethod = sm->idmethods[methodUtype];
+	if (sm->useMethodDescrAlias)
+	{
+		methodUtype = stream.read<uint8>();
+	}
+	else
+	{
+		methodUtype = stream.read<uint16>();
+	}
 
 	if(componentPropertyUType > 0)
 	{
@@ -67,6 +84,8 @@ void MonsterBase::onRemoteMethodCall(MemoryStream& stream)
 
 		return;
 	}
+
+	Method* pMethod = sm->idmethods[methodUtype];
 
 	switch(pMethod->methodUtype)
 	{
@@ -796,3 +815,4 @@ void MonsterBase::detachComponents()
 {
 }
 
+}
